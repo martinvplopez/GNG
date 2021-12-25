@@ -128,7 +128,6 @@ class GrowingNeuralGas(object):
 
                         # Insertar un nodo en el medio de los anteriores elegidos
                         self.A = tf.Variable(tf.concat([self.A, tf.expand_dims(0.5 * (self.A[indexUnitWithMaxError_] + self.A[indexNeighbourWithMaxError_]), 0)], 0))
-
                         # Conectar el nuevo nodo y eliminar la arista anterior
                         self.N.append(Graph(self.A.shape[0] - 1,[indexUnitWithMaxError_, indexNeighbourWithMaxError_], [0.0, 0.0]))
                         self.N[indexUnitWithMaxError_].removeNeighbour(indexNeighbourWithMaxError_)
