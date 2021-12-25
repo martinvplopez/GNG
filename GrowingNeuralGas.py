@@ -162,10 +162,10 @@ class GrowingNeuralGas(object):
 """
     1) Función predict(): una vez la topología está definida, tener una entrada de datos para definir en qué cluster se incluye.
         Idea: Para el grafo que tenemos al final identificar cada cluster (poniendo un nombre o color) y cuando haya una entrada encontrar el nodo más cercano 
-        y asignar dicha etiqueta.
+        y asignar dicha etiqueta. OK
     
     2) Limpiar nuestra DB (se podría hacer un PCA)
     3) Clases GrowingNeuralGasSaver 
     4) GrowingNeuralGasLoader (almacenar y cargar la Red en disco para su posterior utilización con datos de test),
-    5) GrowingNeuralGasPlotter (visualización de las unidades de la Red y de los diferentes Agrupamientos).
+    5) GrowingNeuralGasPlotter (visualización de las unidades de la Red y de los diferentes Agrupamientos). OK
 """
