@@ -76,7 +76,7 @@ class GrowingNeuralGas(object):
             connectedComponents.append(connectedComponent)
         return uniqueConnectedComponentIndeces.__len__(), connectedComponents
 
-    def fit(self, trainingX, numberEpochs):
+    def fit(self, trainingX, numberEpochs, numClusters):
         self.A = tf.Variable(tf.random.normal([2, trainingX.shape[1]], 0.0, 1.0, dtype=tf.float32)) # Creacion 2 nodos aleatorios
         # print(self.A)
         # print("punto 1", self.A[0].numpy())
@@ -116,8 +116,8 @@ class GrowingNeuralGas(object):
                         graph.pruneGraph(self.a_max)
                     self.pruneA()
                     self.connectedComponents, self.component = self.getGraphConnectedComponents()
-                    # if self.connectedComponents>4:
-                    #     break
+                    if self.connectedComponents>numClusters: # Criterio de parada según parametro de numero de clusters
+                        break
                     print("GrowingNeuralGas::numberUnits: {} - GrowingNeuralGas::numberGraphConnectedComponents: {}".format(self.A.shape[0], self.connectedComponents))
 
                     # Cada lambda-iteracion se insertara un nuevo nodo
@@ -164,7 +164,7 @@ class GrowingNeuralGas(object):
         Idea: Para el grafo que tenemos al final identificar cada cluster (poniendo un nombre o color) y cuando haya una entrada encontrar el nodo más cercano 
         y asignar dicha etiqueta. OK
     
-    2) Limpiar nuestra DB (se podría hacer un PCA)
+    2) Limpiar nuestra DB (se podría hacer un PCA) OK
     3) Clases GrowingNeuralGasSaver 
     4) GrowingNeuralGasLoader (almacenar y cargar la Red en disco para su posterior utilización con datos de test),
     5) GrowingNeuralGasPlotter (visualización de las unidades de la Red y de los diferentes Agrupamientos). OK
