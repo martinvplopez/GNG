@@ -148,6 +148,7 @@ class GrowingNeuralGas(object):
         print("FIT HAS ENDED")
         self.connectedComponents, self.component = self.getGraphConnectedComponents() # Analisis de la topologia una vez ha finalizado
         # Cluster.clusters(self.component,self.N, self.A)
+        print("N:",self.N)
         GrowingNeuralGasPlotter.plotGraphConnectedComponent(
             r'C://Users//marti//PycharmProjects//Growing Neural Gas//ImagesTest1',
             'graphConnectedComponents_' + '{}_{}'.format(self.A.shape[0], self.connectedComponents),
