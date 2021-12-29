@@ -1,15 +1,17 @@
 import pandas as pd
 import tensorflow as tf
-# Aplicar GNG al conjunto de testeo "Sample Cluster Data 2D"
-df=pd.read_csv("Clientes _Ventas_por_Mayor.csv")
-
 from GrowingNeuralGas import GrowingNeuralGas
+from sklearn.preprocessing import StandardScaler
 
+# Aplicar GNG al conjunto de testeo "Sample Cluster Data 2D"
 
-training_set = tf.constant(df.to_numpy(), dtype=tf.float32)
+df=pd.read_csv("Sample_Cluster_Data_2D.csv")
+print(df.head())
 
+features1 = list(df.columns)
+trainx1 = df.loc[:1500,features1].values # Conjunto de entrenamiento
+
+x = StandardScaler().fit_transform(trainx1)
+training_set = tf.constant(x, dtype=tf.float32)
 growingNeuralGas = GrowingNeuralGas()
-growingNeuralGas.fit(training_set, 1)
-
-# growingNeuralGas = GrowingNeuralGas()
-# growingNeuralGas.fit(X, 5)
+growingNeuralGas.fit(training_set, 1, 7)

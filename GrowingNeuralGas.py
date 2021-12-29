@@ -9,7 +9,7 @@ from GrowingNeuralGasPlotter import GrowingNeuralGasPlotter
 
 class GrowingNeuralGas(object):
 
-    def __init__(self, epsilon_a=.1, epsilon_n=.05, a_max=10, eta=5, alpha=.1, delta=.1, maxNumberUnits=500):
+    def __init__(self, epsilon_a=.1, epsilon_n=.05, a_max=10, eta=10, alpha=.1, delta=.1, maxNumberUnits=500):
         self.A = None
         self.N = []
         self.connectedComponents=0
@@ -78,10 +78,6 @@ class GrowingNeuralGas(object):
 
     def fit(self, trainingX, numberEpochs, numClusters):
         self.A = tf.Variable(tf.random.normal([2, trainingX.shape[1]], 0.0, 1.0, dtype=tf.float32)) # Creacion 2 nodos aleatorios
-        # print(self.A)
-        # print("punto 1", self.A[0].numpy())
-        # print("punto 2", self.A[1].numpy())
-
         self.N.append(Graph(0))
         self.N.append(Graph(1))
         self.error_ = tf.Variable(tf.zeros([2, 1]), dtype=tf.float32)
@@ -116,9 +112,11 @@ class GrowingNeuralGas(object):
                         graph.pruneGraph(self.a_max)
                     self.pruneA()
                     self.connectedComponents, self.component = self.getGraphConnectedComponents()
-                    if self.connectedComponents>numClusters: # Criterio de parada según parametro de numero de clusters
+                    print( "GrowingNeuralGas::numberUnits: {} - GrowingNeuralGas::numberGraphConnectedComponents: {}".format(self.A.shape[0], self.connectedComponents))
+
+                    # Criterio de parada según número de clusters
+                    if self.connectedComponents>=numClusters:
                         break
-                    print("GrowingNeuralGas::numberUnits: {} - GrowingNeuralGas::numberGraphConnectedComponents: {}".format(self.A.shape[0], self.connectedComponents))
 
                     # Cada lambda-iteracion se insertara un nuevo nodo
                     if not (numberProcessedRow + 1) % self.eta:
@@ -148,25 +146,33 @@ class GrowingNeuralGas(object):
         print("FIT HAS ENDED")
         self.connectedComponents, self.component = self.getGraphConnectedComponents() # Analisis de la topologia una vez ha finalizado
         # Cluster.clusters(self.component,self.N, self.A)
-        print("N:",self.N)
         GrowingNeuralGasPlotter.plotGraphConnectedComponent(
             r'C://Users//marti//PycharmProjects//Growing Neural Gas//ImagesTest1',
             'graphConnectedComponents_' + '{}_{}'.format(self.A.shape[0], self.connectedComponents),
             self.A,
             self.N, self.component)
 
-
     def predict(self, sample): # Dada una entrada y una topología aprendida se debe devolver el cluster donde se encuentra
         indexNearestUnit = self.findNearestUnit(sample, self.A)
         return self.N[indexNearestUnit].getClusterId()
 
-"""
-    1) Función predict(): una vez la topología está definida, tener una entrada de datos para definir en qué cluster se incluye.
-        Idea: Para el grafo que tenemos al final identificar cada cluster (poniendo un nombre o color) y cuando haya una entrada encontrar el nodo más cercano 
-        y asignar dicha etiqueta. OK
-    
-    2) Limpiar nuestra DB (se podría hacer un PCA) OK
-    3) Clases GrowingNeuralGasSaver 
-    4) GrowingNeuralGasLoader (almacenar y cargar la Red en disco para su posterior utilización con datos de test),
-    5) GrowingNeuralGasPlotter (visualización de las unidades de la Red y de los diferentes Agrupamientos). OK
-"""
+    def GrowingNeuralGasSaver(self):
+        self.N = str(self.N)
+        self.A = str(self.A)
+        n_file = open(r"C:\Users\YO\PycharmProjects\GNG\grafo.txt", "w")
+        a_file = open(r"C:\Users\YO\PycharmProjects\GNG\puntos.txt", "w")
+        for row in self.A:
+            a_file.write(self.A + "\n")
+        for row in self.N:
+            n_file.write(self.N + "\n")
+        a_file.close()
+        n_file.close()
+
+    def GrowingNeuralGasLoader(self):
+        filename1 = 'grafo.txt'
+        filename2 = 'puntos.txt'
+        with open(filename1) as file:
+            self.N = [[str(digit) for digit in line.split()] for line in file]
+
+        with open(filename2) as file:
+            self.A = tf.convert_to_tensor([[str(digit) for digit in line.split()] for line in file])
