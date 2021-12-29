@@ -4,7 +4,6 @@ import numpy as np
 import tensorflow as tf
 
 from Graph import Graph
-from Cluster import Cluster
 from GrowingNeuralGasPlotter import GrowingNeuralGasPlotter
 
 class GrowingNeuralGas(object):
