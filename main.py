@@ -2,6 +2,7 @@ import tensorflow as tf
 
 from GrowingNeuralGas import GrowingNeuralGas
 
+# Prueba arquitectura con entrada distribuida uniforme
 
 tf.random.set_seed(23)
 X = tf.concat([tf.random.normal([500, 2], 0.0, 0.25, dtype=tf.float32, seed=1) + tf.constant([0.0, 0.0]),

@@ -5,7 +5,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
 
-# # Limpieza e introducción al sistema inteligente del GNG del conjunto de datos: Clientes de ventas al por mayor
+# Limpieza e introducción al sistema inteligente del GNG del conjunto de datos: Clientes de ventas al por mayor
 
 df=pd.read_csv("Clientes _Ventas_por_Mayor.csv")
 # descripcionData=df.describe().loc[['mean','std']]
